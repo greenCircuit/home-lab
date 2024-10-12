@@ -12,6 +12,6 @@ runConfig:
       extraArg: ""
       
     - name: lab 
-      path: lab/lab-services-compose.yaml
+      path: lab/lab-services.yaml
       action: up
       extraArg: ""

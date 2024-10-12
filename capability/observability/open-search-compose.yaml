@@ -12,38 +12,38 @@ services:
       - DISABLE_INSTALL_DEMO_CONFIG=true
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=yourStrongPassword123!
     volumes:
-      - ~/Desktop/PycharmProjects/lab/capability/observability/opensearch-data:/usr/share/opensearch/data
+      - opensearch-data:/usr/share/opensearch/data
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer
 
-  # opensearch-dashboard:
-  #   image: docker.io/opensearchproject/opensearch-dashboards:latest
-  #   container_name: opensearch-dashboard
-  #   environment:
-  #     - OPENSEARCH_HOSTS=http://opensearch:9200
-  #     - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
-  #   ports:
-  #     - "5601:5601"
-  #   networks:
-  #     - observability
-  #   depends_on:
-  #     - opensearch
+  opensearch-dashboard:
+    image: docker.io/opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboard
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+    ports:
+      - "5601:5601"
+    networks:
+      - observability
+    depends_on:
+      - opensearch
 
-  # fluent-bit:
-  #   networks:
-  #     - observability
-  #   image: docker.io/fluent/fluent-bit:latest
-  #   container_name: fluent-bit
-  #   ports:
-  #     - "2020:2020" # Fluent Bit HTTP Server for health checks
-  #   volumes:
-  #     - ./logging/fluent-bint.conf:/fluent-bit/etc/fluent-bit.conf
-  #     - ~/.local/share/containers/storage/overlay-containers:/containers/storage/overlay-containers
-  #   environment:
-  #     OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
-  #   depends_on:
-  #     - opensearch
+  fluent-bit:
+    networks:
+      - observability
+    image: docker.io/fluent/fluent-bit:latest
+    container_name: fluent-bit
+    ports:
+      - "2020:2020" # Fluent Bit HTTP Server for health checks
+    volumes:
+      - ./logging/config:/fluent-bit/etc/fluent-bit.conf
+      - ~/.local/share/containers/storage/overlay-containers:/containers/storage/overlay-containers
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
+    depends_on:
+      - opensearch
 
 volumes:
   opensearch-data:

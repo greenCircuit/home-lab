@@ -16,6 +16,19 @@ services:
       - export:/export
     network_mode: host
 
+# TO DO
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin4_container
+  #   restart: always
+  #   ports:
+  #     - "8888:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@domain-name.com
+  #     PGADMIN_DEFAULT_PASSWORD: strong-password
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+
   django-db:
     user: "1000" 
     image: localhost/db_central:prod
@@ -33,7 +46,7 @@ services:
     container_name: journey
     volumes:
     - ~/hd-1/pics/main_branch:/media/${USER}/CC8A86968A867CA8/pics/main_branch
-    - ~/Desktop/PycharmProjects/journal/journal:~/Desktop/PycharmProjects/journal/journal
+    - ~/Desktop/PycharmProjects/journal/journal:/home/${USER}Desktop/PycharmProjects/journal/journal
     ports:
       - 8100:8100
     network_mode: host
