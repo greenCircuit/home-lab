@@ -1,0 +1,17 @@
+# to debug open search fluent bit is part of open search 
+version: '3.7'
+services:
+  fluent-bit:
+    network_mode: host
+    image: docker.io/fluent/fluent-bit:latest
+    container_name: fluent-bit
+    ports:
+      - "2020:2020" # Fluent Bit HTTP Server for health checks
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf # Mounting your local conf file into the container
+
+      # - ./logging/config:/fluent-capability/observability/logging/fluent-bit.conf/etc/fluent-bit.conf
+      -  ~/.local/share/containers/storage/overlay-containers:/containers/storage/overlay-containers
+      # -  ~/.local/share/containers/storage/overlay-containers:/containers/storage/overlay-containers
+    environment:
+      OPENSEARCH_HOSTS: '["https://127.0.0.1:9200"]'

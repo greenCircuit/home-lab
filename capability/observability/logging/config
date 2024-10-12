@@ -1,0 +1,18 @@
+[SERVICE]
+    Flush        5
+    Log_Level    info
+    Daemon       off
+
+[INPUT]
+    Name         tail
+    Path         /containers/storage/overlay-containers/*/userdata/ctr.log
+    Parser       json
+    Tag          pod_name
+
+[OUTPUT]
+    Name                 opensearch
+    Match                *
+    Host                 localhost
+    Port                 9200
+    Index                fluent-bit-test
+    Suppress_Type_Name   On

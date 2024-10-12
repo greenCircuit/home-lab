@@ -1,0 +1,13 @@
+
+version: '3.7'
+services:
+  netshoot:
+    container_name: netshoot-test
+    networks:
+      - observability
+    image: docker.io/nicolaka/netshoot:latest
+    tty: true           # <-- This option
+    
+networks:
+  observability:
+    external: true
