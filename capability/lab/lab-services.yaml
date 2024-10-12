@@ -1,0 +1,48 @@
+version: "3"
+volumes:
+  data:
+  export:
+
+services:
+  postgres-sql:
+    image: docker.io/postgres:14-alpine
+    container_name: postgres-sql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - data:/var/lib/postgresql/data 
+      - export:/export
+    network_mode: host
+
+  django-db:
+    user: "1000" 
+    image: localhost/db_central:prod
+    command:  python manage.py runserver 0.0.0.0:8200
+    container_name: django-db
+    ports:
+      - 8200:8200
+    network_mode: host
+    depends_on:
+      - postgres-sql
+
+  journey:
+    image: localhost/journey:prod
+    command:  python manage.py runserver 0.0.0.0:8100
+    container_name: journey
+    volumes:
+    - ~/hd-1/pics/main_branch:/media/${USER}/CC8A86968A867CA8/pics/main_branch
+    - ~/Desktop/PycharmProjects/journal/journal:~/Desktop/PycharmProjects/journal/journal
+    ports:
+      - 8100:8100
+    network_mode: host
+    depends_on:
+      - postgres-sql
+  
+#  logs-maker:
+#    image: localhost/logs-maker:prod
+#    container_name: logs-maker 
+#    ports:
+#      - 3001:3001
+#    network_mode: host

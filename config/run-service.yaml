@@ -1,0 +1,17 @@
+# config how to run podman compose 
+runConfig:
+  services:
+    - name: grafana
+      path: observability/grafana-compose.yaml
+      action: up
+      extraArg: ""
+      
+    - name: openSearch 
+      path: observability/open-search-compose.yaml
+      action: up
+      extraArg: ""
+      
+    - name: lab 
+      path: lab/lab-services-compose.yaml
+      action: up
+      extraArg: ""

@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  prometheus:
+    networks:
+      - observability
+    image: docker.io/prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ~/Desktop/PycharmProjects/lab/capability/observability/grafana/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    networks:
+      - observability
+    ports:
+      - 9100:9100
+    networks:
+      - observability
+  
+  grafana:
+    networks:
+      - observability
+    image: docker.io/grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+    - ~/Desktop/PycharmProjects/lab/capability/observability/grafana/automatic.yml:/etc/grafana/provisioning/datasources/automatic.yml
+    - ~/Desktop/PycharmProjects/lab/capability/observability/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+    - ~/Desktop/PycharmProjects/lab/capability/observability/grafana/dashboards:/var/lib/grafana/dashboards
+
+  yacht:
+    networks:
+      - observability
+    image: ghcr.io/selfhostedpro/yacht:latest
+    ports:
+      - 3100:8000
+    volumes:
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock 
+
+networks:
+  observability:
+    external: true
